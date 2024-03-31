@@ -1,9 +1,15 @@
 <script setup>
 import { onMounted, reactive } from 'vue'
 import CardImage from './components/CardImage.vue'
+import Loader from './components/Loader.vue'
 import { getApi, getPersonApi } from './utils/connectionApi.js'
 import { sorteiaId } from './utils/randomId.js'
 
+const loader = reactive({
+  show: false,
+  mensagem: 'Carregando...'
+
+})
 const todosDados = reactive({
   dados: [],
   ids: [],
@@ -58,9 +64,19 @@ onMounted(async () => {
     todosDados.dados = await getApi(i)
 
   }
-  await buscaTodosDados()
-  await buscaDadosPersonagem()
-  
+  todosDados.dados.errors.filter(async (e) => {
+    if(e.status == 429){
+      loader.show = false
+      loader.mensagem = 'Erro no servidor!'
+
+    }else{
+      loader.show = true
+      loader.mensagem = 'Carregando...'
+      await buscaTodosDados()
+      await buscaDadosPersonagem()
+
+    }    
+  })  
 })
 
 </script>
@@ -71,24 +87,30 @@ onMounted(async () => {
       <h1>Facemash</h1>
     </div>
     <div class="app-cards">
-      <div class="left-card">
-        <button @click="personagemEscolhido(personagem1.id)">
-          <CardImage 
-            :nome="personagem1.nome"
-            :imagem="personagem1.imagem"
-            :especie="personagem1.especie" />
-        </button>
+      <div class="app-cards-loader" v-if="!loader.show">
+        <Loader
+          :msg="loader.mensagem" />
       </div>
-      <div>
-        <span>OU</span>
-      </div>
-      <div class="right-card">
-        <button @click="personagemEscolhido(personagem2.id)">
-          <CardImage
-            :nome="personagem2.nome"
-            :imagem="personagem2.imagem"
-            :especie="personagem2.especie" />
-        </button>
+      <div class="app-cards-body" v-else>
+        <div class="left-card">
+          <button @click="personagemEscolhido(personagem1.id)">
+            <CardImage 
+              :nome="personagem1.nome"
+              :imagem="personagem1.imagem"
+              :especie="personagem1.especie" />
+          </button>
+        </div>
+        <div>
+          <span>OU</span>
+        </div>
+        <div class="right-card">
+          <button @click="personagemEscolhido(personagem2.id)">
+            <CardImage
+              :nome="personagem2.nome"
+              :imagem="personagem2.imagem"
+              :especie="personagem2.especie" />
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -120,27 +142,37 @@ onMounted(async () => {
     .app-cards{
       height: 85vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
 
-      button{
-        border: none;
-        padding: 0;
-        border-radius: 5px;
-        margin: 1rem;
-        background-color: #6d6d6d;
-
-        &:hover{
-          background-color: #535353;
-          cursor: pointer;
-
-        }        
-      }
-      span{
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: white;
+      .app-cards-loader{
         
+      }
+      .app-cards-body{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        button{
+          border: none;
+          padding: 0;
+          border-radius: 5px;
+          margin: 1rem;
+          background-color: #6d6d6d;
+  
+          &:hover{
+            background-color: #535353;
+            cursor: pointer;
+  
+          }        
+        }
+        span{
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: white;
+          
+        }
       }
     }
   }
