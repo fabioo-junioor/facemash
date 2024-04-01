@@ -62,22 +62,20 @@ const personagemEscolhido = async (id) => {
 onMounted(async () => {
   for(var i=1; i<=47; i++){
     todosDados.dados = await getApi(i)
-    loader.mensagem = `Carregando... ${(i*2.16).toFixed(2)}`
+    loader.mensagem = `Carregando... ${(i*2.12).toFixed(2)}`
 
-  }
-  todosDados.dados.errors.filter(async (e) => {
-    if(e.status == 429){
-      loader.show = false
-      loader.mensagem = 'Erro no servidor!'
+  }  
+  if(todosDados.dados.errors){
+    loader.show = false
+    loader.mensagem = 'Erro no servidor!'
 
-    }else{
-      loader.show = true
-      loader.mensagem = 'Carregando...'
-      await buscaTodosDados()
-      await buscaDadosPersonagem()
+  }else{
+    loader.show = true
+    loader.mensagem = 'Carregando...'
+    await buscaTodosDados()
+    await buscaDadosPersonagem()
 
-    }    
-  })  
+  }  
 })
 
 </script>
