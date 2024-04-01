@@ -62,6 +62,7 @@ const personagemEscolhido = async (id) => {
 onMounted(async () => {
   for(var i=1; i<=47; i++){
     todosDados.dados = await getApi(i)
+    loader.mensagem = `Carregando... ${(i*2.16).toFixed(2)}`
 
   }
   todosDados.dados.errors.filter(async (e) => {
