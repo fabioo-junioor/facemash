@@ -55,4 +55,37 @@ defineProps(['nome', 'imagem', 'especie'])
             }
         }
     }
+/*################################################*/
+@media only screen and (max-width: 1560px) {
+
+}
+@media only screen and (max-width: 1200px) {
+
+}
+@media only screen and (max-width: 992px) {
+
+}
+@media only screen and (max-width: 720px) {
+    #card-personagem{
+        .card-imagem{
+            width: 15rem;
+            height: 17rem;
+
+        }
+        .card-nome{
+            font-size: 1rem;
+
+        }
+        .card-especie{
+            font-size: .9rem;
+
+        }
+    }
+}
+@media only screen and (max-width: 481px) {
+
+}
+@media only screen and (max-width: 360px) {
+  
+}
 </style>
