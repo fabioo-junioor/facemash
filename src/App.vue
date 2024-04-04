@@ -4,7 +4,12 @@ import CardImage from './components/CardImage.vue'
 import Loader from './components/Loader.vue'
 import { getApi, getPersonApi } from './utils/connectionApi.js'
 import { sorteiaId } from './utils/randomId.js'
+import { db, collection, getDocs, addDoc, updateDoc, doc } from './api/db/connFirebase.js'
 
+const dbFacemash = reactive({
+  dbLista: []
+
+})
 const loader = reactive({
   show: false,
   mensagem: 'Carregando...'
@@ -54,12 +59,56 @@ const buscaDadosPersonagem = async () => {
   
 }
 const personagemEscolhido = async (id) => {
-  console.log('escolheu: ', id)
+  //console.log('escolheu: ', id)
+  let personagem = null
+  personagem = await existePersonagemDb(id)
+  if(personagem != null){
+    await atualizaVoto(personagem.idDoc, personagem.id, personagem.todosVotos+1)
+
+  }else{
+    await adicionaVoto(id)
+
+  }  
+  await getDbFacemash()
   await buscaDadosPersonagem()
+
+}
+const getDbFacemash = async () => {
+  dbFacemash.dbLista = []
+  var dbShot = await getDocs(collection(db, 'facemash'))
+  dbShot.docs.map((e) => {
+    dbFacemash.dbLista.push({idDoc: e.id, id: e.data().id, totalVotos: e.data().totalVotos})
+
+  })
+}
+const existePersonagemDb = async (id) => {
+  let exixte = null
+  for(var i=0; i<dbFacemash.dbLista.length; i++){
+    if(dbFacemash.dbLista[i].id == id){
+      return exixte = { idDoc: dbFacemash.dbLista[i].idDoc, id: dbFacemash.dbLista[i].id, todosVotos: dbFacemash.dbLista[i].totalVotos }
+
+    }
+  }
+  return exixte
+
+}
+const adicionaVoto = async (id) => {
+  await addDoc(collection(db, 'facemash'), {id: id, totalVotos: 1})
+  console.log('adiconado!')
+
+}
+const atualizaVoto = async (idDoc, id, totalVotos) => {
+  let ref = doc(db, 'facemash', idDoc)
+  await updateDoc(ref,  {
+    totalVotos: totalVotos
+
+  })
+  console.log('atualizado!')
 
 }
 
 onMounted(async () => {
+  await getDbFacemash()
   for(var i=1; i<=47; i++){
     todosDados.dados = await getApi(i)
     loader.mensagem = `Carregando... ${(i*2.12).toFixed(2)}`
