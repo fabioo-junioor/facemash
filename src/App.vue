@@ -111,7 +111,7 @@ onMounted(async () => {
   await getDbFacemash()
   for(var i=1; i<=47; i++){
     todosDados.dados = await getApi(i)
-    loader.mensagem = `Carregando... ${(i*2.12).toFixed(2)}`
+    loader.mensagem = `Carregando... ${(i*2.12).toFixed(0)}%`
 
   }  
   if(todosDados.dados.errors){
@@ -169,13 +169,15 @@ onMounted(async () => {
 
   #app{
     height: 100vh;
+    width: 100vw;
     background: #11998e;
     background: -webkit-linear-gradient(to right, #38ef7d, #11998e);
     background: linear-gradient(to right, #38ef7d, #11998e);
     font-family: "Dosis", sans-serif;
 
     .app-header{
-      height: 15vh;
+      height: 8rem;
+      width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -188,7 +190,8 @@ onMounted(async () => {
       }
     }
     .app-cards{
-      height: 85vh;
+      height: calc(100vh - 8rem);
+      width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -203,6 +206,8 @@ onMounted(async () => {
 
       }
       .app-cards-body{
+        height: 100%;
+        width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -229,4 +234,40 @@ onMounted(async () => {
       }
     }
   }
+/*################################################*/
+@media only screen and (max-width: 1560px) {
+
+}
+@media only screen and (max-width: 1200px) {
+
+}
+@media only screen and (max-width: 992px) {
+
+}
+@media only screen and (max-width: 720px) {
+  #app{
+    height: auto;
+
+    .app-cards{
+      height: auto;
+
+      .app-cards-loader{
+        height: calc(100vh - 8rem);
+      }
+
+      .app-cards-body{
+        height: auto;
+        flex-direction: column;
+        
+      }
+    }
+  }
+
+}
+@media only screen and (max-width: 481px) {
+
+}
+@media only screen and (max-width: 360px) {
+  
+}
 </style>
