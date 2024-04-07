@@ -59,7 +59,6 @@ const buscaDadosPersonagem = async () => {
   
 }
 const personagemEscolhido = async (id) => {
-  //console.log('escolheu: ', id)
   let personagem = null
   personagem = await existePersonagemDb(id)
   if(personagem != null){
