@@ -106,7 +106,6 @@ const atualizaVoto = async (idDoc, id, totalVotos) => {
   console.log('atualizado!')
 
 }
-
 onMounted(async () => {
   await getDbFacemash()
   for(var i=1; i<=47; i++){
@@ -133,6 +132,9 @@ onMounted(async () => {
   <div id="app">
     <div class="app-header">
       <h1>Facemash</h1>
+    </div>
+    <div class="app-header-message">
+      <h4>Qual seu favorito? Clique para escolher.</h4>
     </div>
     <div class="app-cards">
       <div class="app-cards-loader" v-if="!loader.show">
@@ -189,8 +191,22 @@ onMounted(async () => {
 
       }
     }
+    .app-header-message{
+      width: 100%;
+      height: 5rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+
+      h4{
+        color: white;
+        font-size: 1.4rem;
+        font-weight: bold;
+
+      }
+    }
     .app-cards{
-      height: calc(100vh - 8rem);
+      height: calc(100vh - 13rem);
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -252,7 +268,7 @@ onMounted(async () => {
       height: auto;
 
       .app-cards-loader{
-        height: calc(100vh - 8rem);
+        height: calc(100vh - 13rem);
       }
 
       .app-cards-body{
@@ -268,6 +284,16 @@ onMounted(async () => {
 
 }
 @media only screen and (max-width: 360px) {
-  
+  #app{
+    .app-header-message{
+      align-items: center;
+
+      h4{
+        text-align: center;
+        font-size: 1.2rem;
+        
+      }
+    }
+  }
 }
 </style>
